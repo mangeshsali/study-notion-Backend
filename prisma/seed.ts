@@ -1,4 +1,4 @@
-import db from "../utils/db";
+import db from "../src/utils/db";
 
 const main = async () => {
   const categories = [

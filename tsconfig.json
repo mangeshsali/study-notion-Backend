@@ -123,7 +123,9 @@
     "strict": true,
     "outDir": "./dist",
     "rootDir": "./",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "useUnknownInCatchVariables": false,
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   },
   "include": ["**/*"],
   "exclude": ["node_modules", "dist"]
