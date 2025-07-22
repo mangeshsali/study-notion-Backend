@@ -27,6 +27,9 @@ model User {
   role      Role     @default(STUDENT) 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  PasswordTemp PasswordTemp[]
+  Courses Course[]
 }
 
 model Category{
@@ -35,4 +38,36 @@ model Category{
   description String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  courses Course[]
+}
+
+model PasswordTemp{
+  id String @id @default(uuid())
+  userId String
+  token String @unique  
+  expiresAt DateTime
+  isverified Boolean @default(false)
+  isForLogin Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Course {
+  id              String   @id @default(uuid())
+  courseTitle     String
+  shortDescription String
+  price           String
+  categoryId      String
+  thumbnail       String
+  benefits        String
+  requirements    String 
+  userId        String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  category        Category @relation(fields: [categoryId], references: [id])
+  user            User   @relation(fields: [userId], references: [id])
 }

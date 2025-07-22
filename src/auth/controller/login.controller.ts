@@ -3,6 +3,7 @@ import bcrpty from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import db from "../../utils/db";
+import { HandleServerError } from "../../utils/handleServerError";
 
 dotenv.config();
 
@@ -12,17 +13,19 @@ export const login = async (req: Request, res: Response) => {
     const findUser = await db.user.findUnique({ where: { email } });
 
     if (!findUser) {
-      return res.status(404).json({ sucess: false, message: "User not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Invalid credential" });
     }
-
     const isPasswordValid = await bcrpty.compare(
       inputPassword,
       findUser.password
     );
+
     if (!isPasswordValid) {
       return res
         .status(401)
-        .json({ success: false, message: "Invalid password" });
+        .json({ success: false, message: "Invalid credential" });
     }
 
     const payload = {
@@ -34,6 +37,7 @@ export const login = async (req: Request, res: Response) => {
     const token = jwt.sign(payload, process.env.JWT_SECRET as string, {
       expiresIn: "1h",
     });
+
     res.cookie("token", token, {
       httpOnly: true,
     });
@@ -49,9 +53,6 @@ export const login = async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    return res.status(500).json({
-      message: "Internal Server Error",
-      error: error instanceof Error ? error.message : "Unknown error",
-    });
+    return HandleServerError(res, error);
   }
 };

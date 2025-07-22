@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 
 import cookieParser from "cookie-parser";
 import { AuthRouter } from "./src/auth/auth.router";
+import { CourseRouter } from "./src/course/course.router";
 
 dotenv.config();
 
@@ -19,3 +20,4 @@ app.listen(PORT, () => {
 });
 
 app.use("/api/v1/auth", AuthRouter);
+app.use("/api/v1/course", CourseRouter);
